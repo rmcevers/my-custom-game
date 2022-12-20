@@ -1,0 +1,210 @@
+<html>
+<head>
+<title> Duck Run Game </title>
+<script src="https://simplycodingcourses.com/files/simply.js"></script>
+<script>
+function start(){
+var level = []
+
+sjs.open("target",800,500);
+//background music
+var music = new Audio("Music/mountain.mp3")
+var toggle = true
+var musicOn = false
+sjs.keyDown(SPACE_KEY, function(){
+  if(toggle == true){
+    if(musicOn == false){
+      music.play()
+      musicOn=true
+    }else{
+      music.pause()
+      musicOn = false
+    }
+    toggle = false
+    setTimeout(function(){
+      toggle = true
+    },1000)
+  }
+})
+//background
+var background = new sjs.Image("Images/background.png")
+    background.setSize(2500,500)
+//background music instructions
+var toggleInstructions = new sjs.Text("Use W,A,S, and D to move. Press space to toggle music. ",25,"yellow")
+    toggleInstructions.center().centerH()
+setTimeout(function(){
+  toggleInstructions.destroy()
+},3000)
+  sjs.loadImageArray(localStorage.getItem('level'))
+//player properties
+var player = new sjs.Image("Images/Duck Piskel-1.png.png")
+    player.type = "player"
+    player.setSize(80,90)
+    player.setGravity(3)
+    player.center().bottom()
+    player.friction = 0.3
+    player.noBounds = true
+
+//scroll function
+sjs.scrollable(player, background)
+
+//player controls
+var rightFacing = true;
+var rightCount = 0;
+var leftCount = 0;
+
+var rightImages = ["Images/Duck Piskel-1.png.png","Images/Duck Piskel-2.png.png","Images/Duck Piskel-3.png.png", "Images/Duck Piskel-4.png.png", "Images/Duck Piskel-5.png.png","Images/Duck Piskel-6.png.png"]
+var leftImages = ["Images/LeftDuckPiskel-1.png.png","Images/LeftDuckPiskel-2.png.png", "Images/LeftDuckPiskel-3.png.png", "Images/LeftDuckPiskel-4.png.png", "Images/LeftDuckPiskel-5.png.png","Images/LeftDuckPiskel-6.png.png"]
+var speed = 2
+sjs.keyDown(D_KEY, function(){
+  rightFacing = true;
+  rightCount = rightCount +1;
+  player.pushRight(speed);
+  player.setImage(rightImages[rightCount]);
+  if(rightCount == 5){
+    rightCount = 0;
+  }
+  if(rightCount >= 6){
+    player.setImage("Images/Duck Piskel-1.png.png")
+  }
+});
+
+sjs.keyDown(A_KEY, function(){
+  rightFacing = false;
+  leftCount = leftCount +1
+  player.pushLeft(speed);
+  player.setImage(leftImages[leftCount]);
+  if(leftCount == 5){
+    leftCount = 0;
+  }
+  if(leftCount>= 6){
+    player.setImage("Images/LeftDuckPiskel-1.png.png")
+  }
+});
+//jumping code
+var canJump = true
+sjs.keyDown(W_KEY, function(){
+  if(canJump == true){
+    canJump = false
+    player.pushUp(50)
+    if(rightFacing == true){
+      player.setImage("Images/Duck Piskel-1.png.png")
+      rightCount = 8
+    }else{
+      player.setImage("Images/LeftDuckPiskel-1.png.png")
+      leftCount = 8
+    }
+  }
+});
+
+window.addEventListener("keyup",function(e){
+  if(e.keyCode == D_KEY){
+    player.setImage("Images/Duck Piskel-1.png.png")
+  }else if(e.keyCode == A_KEY){
+    player.setImage("Images/LeftDuckPiskel-1.png.png")
+  }
+})
+
+//On hits
+sjs.onHit("player","platform",function(x,y){
+  sjs.stoppedBy(x,y);
+  if(canJump == false && x.y < y.y-85){
+    canJump = true;
+    rightCount = 0;
+    leftCount = 0;
+  }
+})
+sjs.onHit("player", "powerUp",function(x,y){
+  speed = 5;
+  setTimeout(function(){
+    speed = 2
+  },3000)
+  y.destroy();
+})
+var score = 0;
+var scoreText = new sjs.Text("Score: 0", 21, "white")
+scoreText.right().offset(-20,0);
+scoreText.fixed = true
+sjs.onHit("player", "score", function(x,y){
+  score=score +1
+  scoreText.setText("Score: "+score)
+  localStorage.setItem("score",score)
+  y.destroy()
+});
+var flagOn = true
+sjs.onHit("player","flag",function(x,y){
+  x.stop();
+  if(flagOn=true){
+    flagOn=false
+    setTimeout(function(){
+      y.setImage("Images/flag-4.png.png")
+    },800)
+    setTimeout(function(){
+      y.setImage("Images/flag-8.png.png")
+    },1600)
+    setTimeout(function(){
+      window.location="test.html"
+    },2400)
+  }
+})
+sjs.onHit("player","bottom_screen",function(x,y){
+  sjs.stoppedBy(x,y)
+  if(canJump==false){
+    canJump = true
+    rightCount = 0
+    leftCount = 0
+  }
+})
+sjs.onHit("player",
+["right_screen", "left_screen", "top_screen"],function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("player",
+["right_screen", "left_screen", "top_screen"],function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("enemy","bottom_screen", function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("enemy", ["left_screen", "right_screen", "wall","pad"],function(x,y){
+  sjs.bounceOff(x,y)
+})
+sjs.onHit("enemy", "platform", function(x,y){
+  if(x.isAboveOf(y)==true){
+    sjs.stoppedBy(x,y)
+  }else{
+    sjs.bounceOff(x,y)
+  }
+})
+sjs.onHit("player","wall", function(x,y){
+  if(x.isAboveOf(y)==true){
+    sjs.stoppedBy(x,y)
+    if(canJump == false && x.y < y.y-85){
+    canJump = true;
+    rightCount = 0;
+    leftCount = 0;
+  }
+  }else{
+    sjs.bounceOff(x,y)
+  }
+})
+sjs.onHit("player", "pad", function(x,y){
+  if(x.isAboveOf(y)==true){
+    x.pushUp(80)
+  }else{
+    sjs.stoppedBy(x,y)
+  }
+})
+sjs.onHit("player", "enemy", function(x,y){
+  x.destroy()
+  window.location = "gameover.html"
+})
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Duck Run Game </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>

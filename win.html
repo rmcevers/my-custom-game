@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Winner! </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open();
+var victoryText = new sjs.Text("Congrats! You won!",30, "white")
+    victoryText.center().offset(0,50)
+var menuButton = new sjs.Button("Main Menu", function(){
+  window.location = "duckIndex.html"
+})
+  menuButton.center()
+var scoreText = new sjs.Text("Score: 0",40, "orange")
+  scoreText.setText("Score: " + localStorage.getItem("score"))
+  scoreText.center().offset(0,-50)
+}
+</script>
+</head>
+<body onload="start()">
+<h1> You Win! </h1>
+
+<div id="target" style="margin:auto;background:green;"></div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<html>
+<head>
+<title> Duck Run Game </title>
+<script src="https://simplycodingcourses.com/files/simply.js"></script>
+<script>
+function start(){
+var level = []
+
+sjs.open("target",800,500);
+//background music
+var music = new Audio("Music/mountain.mp3")
+var toggle = true
+var musicOn = false
+sjs.keyDown(SPACE_KEY, function(){
+  if(toggle == true){
+    if(musicOn == false){
+      music.play()
+      musicOn=true
+    }else{
+      music.pause()
+      musicOn = false
+    }
+    toggle = false
+    setTimeout(function(){
+      toggle = true
+    },1000)
+  }
+})
+//background
+var background = new sjs.Image("Images/background.png")
+    background.setSize(2500,500)
+
+  sjs.loadImageArray('[{"width":38,"height":150,"x":489,"y":200,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":489,"y":350,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":121,"y":263,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":128,"height":128,"x":130,"y":372,"sx":5,"sy":0,"ay":1,"topSpeed":10,"src":"Images/r_enemy.png","alt":"add text","type":"enemy","facingLeft":false,"left_img":"Images/l_enemy.png","right_img":"Images/r_enemy.png","friction":0,"classType":"Image","noBounds":true},{"width":30,"height":30,"x":401,"y":392,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":131,"height":50,"x":349,"y":450,"sx":0,"sy":0,"topSpeed":10,"src":"Images/jumpPad.png","alt":"add text","type":"pad","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":489,"y":129,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":128,"height":128,"x":1353.3620304386066,"y":372,"sx":5,"sy":1,"ay":1,"topSpeed":10,"src":"Images/r_enemy.png","alt":"add text","type":"enemy","facingLeft":false,"left_img":"Images/l_enemy.png","right_img":"Images/r_enemy.png","friction":0,"classType":"Image","noBounds":true},{"width":120,"height":30,"x":653.4628713620001,"y":321,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":699.5478846207662,"y":254,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":894.5478846207662,"y":224,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":943.6064808472865,"y":161,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":1011.6064808472865,"y":104,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":737,"y":350,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":1095.3620304386066,"y":350,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1130.3669899207378,"y":351,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":1250.3620304386066,"y":231,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":1250.3620304386066,"y":108,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":971.3620304386066,"y":224,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":1615.6245948184346,"y":200,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1197.6245948184346,"y":420,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1236.6245948184346,"y":457,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1239.6245948184346,"y":397,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1152.6245948184346,"y":455,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1157.6245948184346,"y":393,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":1847.7085001534967,"y":350,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1765.7085001534967,"y":320,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1651.7085001534967,"y":320,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1885.7197969637505,"y":406,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":2123.7197969637505,"y":224,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1931.7197969637505,"y":354,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":2171.7197969637505,"y":179,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1905.7197969637505,"y":120,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":2243,"y":140,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":38,"height":150,"x":2005,"y":350,"sx":0,"sy":0,"topSpeed":10,"src":"Images/wall.png","alt":"add text","type":"wall","friction":0.05,"classType":"Image"},{"width":128,"height":128,"x":-23968,"y":154150962,"sx":-1.5,"sy":17559,"ay":1,"topSpeed":10,"src":"Images/l_enemy.png","alt":"add text","type":"enemy","facingLeft":true,"left_img":"Images/l_enemy.png","right_img":"Images/r_enemy.png","friction":0,"classType":"Image","noBounds":true},{"width":131,"height":50,"x":2368,"y":450,"sx":0,"sy":0,"topSpeed":10,"src":"Images/jumpPad.png","alt":"add text","type":"pad","friction":0.05,"classType":"Image"},{"width":128,"height":128,"x":2093,"y":372,"sx":-1.5,"sy":0,"ay":1,"topSpeed":10,"src":"Images/l_enemy.png","alt":"add text","type":"enemy","facingLeft":true,"left_img":"Images/l_enemy.png","right_img":"Images/r_enemy.png","friction":0,"classType":"Image","noBounds":true},{"width":120,"height":30,"x":2281,"y":237,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":80,"height":80,"x":2296,"y":157,"sx":0,"sy":0,"topSpeed":10,"src":"Images/flag-1.png.png","alt":"add text","type":"flag","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":680.312671203578,"y":440,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":403,"y":239,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":404,"y":164,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":403,"y":313,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":632.3011745118012,"y":409,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":679.3011745118012,"y":377,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":128,"height":128,"x":942.3620304386066,"y":372,"sx":-5,"sy":0,"ay":1,"topSpeed":10,"src":"Images/l_enemy.png","alt":"add text","type":"enemy","facingLeft":true,"left_img":"Images/l_enemy.png","right_img":"Images/r_enemy.png","friction":0,"classType":"Image","noBounds":true},{"width":30,"height":30,"x":1065.4895622464526,"y":160,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1180.4895622464526,"y":300,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1250.4176723537437,"y":257,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1314.6170501240208,"y":208,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1821.903500713123,"y":273,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1755.903500713123,"y":273,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1688.903500713123,"y":273,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":2421,"y":400,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":168,"y":210,"sx":0,"sy":0,"topSpeed":10,"src":"Images/power_up.png","alt":"add text","type":"powerUp","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":1534.224470131088,"y":320,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":1952,"y":79,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"},{"width":120,"height":30,"x":2243,"y":111,"sx":0,"sy":0,"topSpeed":10,"src":"Images/platform.png","alt":"add text","type":"platform","friction":0.05,"classType":"Image"},{"width":30,"height":30,"x":2294,"y":70,"sx":0,"sy":0,"topSpeed":10,"src":"Images/score.png","alt":"add text","type":"score","friction":0.05,"classType":"Image"}]')
+//background music instructions
+var toggleInstructions = new sjs.Text("Use W,A,S, and D to move. Press space to toggle music. ",25,"yellow")
+    toggleInstructions.center().centerH()
+setTimeout(function(){
+  toggleInstructions.destroy()
+},3000)
+//player properties
+var player = new sjs.Image("Images/Duck Piskel-1.png.png")
+    player.type = "player"
+    player.setSize(80,90)
+    player.setGravity(3)
+    player.center().bottom()
+    player.friction = 0.3
+    player.noBounds = true
+
+//scroll function
+sjs.scrollable(player, background)
+
+//player controls
+var rightFacing = true;
+var rightCount = 0;
+var leftCount = 0;
+
+var rightImages = ["Images/Duck Piskel-1.png.png","Images/Duck Piskel-2.png.png","Images/Duck Piskel-3.png.png", "Images/Duck Piskel-4.png.png", "Images/Duck Piskel-5.png.png","Images/Duck Piskel-6.png.png"]
+var leftImages = ["Images/LeftDuckPiskel-1.png.png","Images/LeftDuckPiskel-2.png.png", "Images/LeftDuckPiskel-3.png.png", "Images/LeftDuckPiskel-4.png.png", "Images/LeftDuckPiskel-5.png.png","Images/LeftDuckPiskel-6.png.png"]
+    
+var speed = 2
+sjs.keyDown(D_KEY, function(){
+  rightFacing = true;
+  rightCount = rightCount +1;
+  player.pushRight(speed);
+  player.setImage(rightImages[rightCount]);
+  if(rightCount == 5){
+    rightCount = 0;
+  }
+  if(rightCount >= 6){
+    player.setImage("Images/Duck Piskel-1.png.png")
+  }
+});
+
+sjs.keyDown(A_KEY, function(){
+  rightFacing = false;
+  leftCount = leftCount +1
+  player.pushLeft(speed);
+  player.setImage(leftImages[leftCount]);
+  if(leftCount == 5){
+    leftCount = 0;
+  }
+  if(leftCount>= 6){
+    player.setImage("Images/LeftDuckPiskel-1.png.png")
+  }
+});
+//jumping code
+var canJump = true
+sjs.keyDown(W_KEY, function(){
+  if(canJump == true){
+    canJump = false
+    player.pushUp(50)
+    if(rightFacing == true){
+      player.setImage("Images/Duck Piskel-1.png.png")
+      rightCount = 8
+    }else{
+      player.setImage("Images/LeftDuckPiskel-1.png.png")
+      leftCount = 8
+    }
+  }
+});
+
+window.addEventListener("keyup",function(e){
+  if(e.keyCode == D_KEY){
+    player.setImage("Images/Duck Piskel-1.png.png")
+  }else if(e.keyCode == A_KEY){
+    player.setImage("Images/LeftDuckPiskel-1.png.png")
+  }
+})
+//On hits
+sjs.onHit("player","platform",function(x,y){
+  sjs.stoppedBy(x,y);
+  if(canJump == false && x.y < y.y-85){
+    canJump = true;
+    rightCount = 0;
+    leftCount = 0;
+  }
+})
+
+sjs.onHit("player", "powerUp",function(x,y){
+  speed = 5
+  setTimeout(function(){
+    speed = 2
+  }, 3000)
+  y.destroy();
+})
+var score = 0;
+var scoreText = new sjs.Text("Score: 0", 21, "white")
+scoreText.right().offset(-20,0);
+scoreText.fixed = true
+sjs.onHit("player", "score", function(x,y){
+  score=score +1
+  scoreText.setText("Score: "+score)
+  localStorage.setItem("score",score)
+  y.destroy()
+});
+var flagOn = true
+sjs.onHit("player","flag",function(x,y){
+  x.stop();
+  if(flagOn=true){
+    flagOn=false
+    setTimeout(function(){
+      y.setImage("Images/flag-4.png.png")
+    },800)
+    setTimeout(function(){
+      y.setImage("Images/flag-8.png.png")
+    },1600)
+    setTimeout(function(){
+      window.location="win.html"
+    },2400)
+  }
+})
+sjs.onHit("player","bottom_screen",function(x,y){
+  sjs.stoppedBy(x,y)
+  if(canJump==false){
+    canJump = true
+    rightCount = 0
+    leftCount = 0
+  }
+})
+sjs.onHit("player",
+["right_screen", "left_screen", "top_screen"],function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("player",
+["right_screen", "left_screen", "top_screen"],function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("enemy","bottom_screen", function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("enemy", ["left_screen", "right_screen", "wall","pad"],function(x,y){
+  sjs.bounceOff(x,y)
+})
+sjs.onHit("enemy", "platform", function(x,y){
+  if(x.isAboveOf(y)==true){
+    sjs.stoppedBy(x,y)
+  }else{
+    sjs.bounceOff(x,y)
+  }
+})
+sjs.onHit("player","wall", function(x,y){
+  if(x.isAboveOf(y)==true){
+    sjs.stoppedBy(x,y)
+    if(canJump == false && x.y < y.y-85){
+    canJump = true;
+    rightCount = 0;
+    leftCount = 0;
+  }
+  }else{
+    sjs.bounceOff(x,y)
+  }
+})
+sjs.onHit("player", "pad", function(x,y){
+  if(x.isAboveOf(y)==true){
+    x.pushUp(80)
+  }else{
+    sjs.stoppedBy(x,y)
+  }
+})
+sjs.onHit("player", "enemy", function(x,y){
+  x.destroy()
+  window.location = "gameover.html"
+})
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Duck Run Game </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>

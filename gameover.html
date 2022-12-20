@@ -1,0 +1,27 @@
+<html>
+<head>
+<title> Game Over </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open();
+var gameoverText = new sjs.Text("You lost",30 , "white")
+  gameoverText.center().offset(0,-80)
+var playAgainButton = new sjs.Button("Play Again?", function(){
+  window.location = "level1.html"
+})
+playAgainButton.center()
+var menuButton = new sjs.Button("Menu", function(){
+  window.location = "duckIndex.html"
+})
+  menuButton.center().offset(0,50)
+
+}// end open function
+</script>
+</head>
+<body onload="start()">
+<h1> Game Over </h1>
+
+<div id="target" style="margin:auto;background:red;"></div>
+</body>
+</html>

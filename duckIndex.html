@@ -1,0 +1,34 @@
+<html>
+<head>
+<title> Menu </title>
+<script src="https://simplycodingcourses.com/files/simply.js"></script>
+<script>
+function start(){
+sjs.open();
+var background = new sjs.Image("Images/background.png")
+var titleText = new sjs.Text("Duck Run",50,"White")
+  titleText.centerH().offset(0,50)
+var designButton = new sjs.Button("Design a level!", function(){
+  window.location = "custom.html"
+})
+  designButton.center()
+var level1Button = new sjs.Button("Level 1", function(){
+  window.location = "level1.html"
+})
+  level1Button.center().offset(0,50)
+var infoButton = new sjs.Button("Info", function(){
+    var infoText = new sjs.Text("Use WASD keys to move. Eat the carrots to gain points. Don't touch the tanks or you will die. Powerups make you faster! Try to get to the flag with a high score!",18,"white")
+    infoText.center().bottom()
+})
+infoButton.center().offset(0,90)
+var creatorTag = new sjs.Text("Made by: Ryan McEvers", 25, "white")
+  
+}//end start function
+</script>
+</head>
+<body onload="start()">
+<h1> Duck Game </h1>
+
+<div id="target" style="margin:auto;background:blue;"></div>
+</body>
+</html>

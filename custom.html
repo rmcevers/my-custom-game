@@ -1,0 +1,294 @@
+<html>
+<head>
+<title> Duck Run Game </title>
+<script src="https://simplycodingcourses.com/files/simply.js"></script>
+<script>
+var level = []
+function start(){
+
+sjs.open("target",800,500);
+
+//background music
+var music = new Audio("Music/mountain.mp3")
+var toggle = true
+var musicOn = false
+sjs.keyDown(SPACE_KEY, function(){
+  if(toggle == true){
+    if(musicOn == false){
+      music.play()
+      musicOn=true
+    }else{
+      music.pause()
+      musicOn = false
+    }
+    toggle = false
+    setTimeout(function(){
+      toggle = true
+    },1000)
+  }
+})
+//background
+var background = new sjs.Image("Images/background.png")
+    background.setSize(2500,500)
+//background music instructions
+var toggleInstructions = new sjs.Text("Use W,A,S, and D to move. Press space to toggle music. ",25,"yellow")
+    toggleInstructions.center().centerH()
+setTimeout(function(){
+  toggleInstructions.destroy()
+},3000)
+//buttons
+var testButton = new sjs.Button("Test", function(){
+  localStorage.setItem('level',sjs.saveImageArray(level))
+  window.open("test.html","_blank")
+})
+var showButton = new sjs.Button("Show", function(){
+  var output = document.querySelector("#output")
+  output.innerHTML = sjs.saveImageArray(level)
+})
+  showButton.offset(75,0)
+//player properties
+var player = new sjs.Image("Images/Duck Piskel-1.png.png")
+    player.type = "player"
+    player.setSize(80,90)
+    player.setGravity(3)
+    player.center().bottom()
+    player.friction = 0.3
+    player.noBounds = true
+
+//scroll function
+sjs.scrollable(player, background)
+
+//player controls
+var rightFacing = true;
+var rightCount = 0;
+var leftCount = 0;
+
+var rightImages = ["Images/Duck Piskel-1.png.png","Images/Duck Piskel-2.png.png","Images/Duck Piskel-3.png.png", "Images/Duck Piskel-4.png.png", "Images/Duck Piskel-5.png.png","Images/Duck Piskel-6.png.png"]
+var leftImages = ["Images/LeftDuckPiskel-1.png.png", "Images/LeftDuckPiskel-2.png.png", "Images/LeftDuckPiskel-3.png.png", "Images/LeftDuckPiskel-4.png.png", "Images/LeftDuckPiskel-5.png.png","Images/LeftDuckPiskel-6.png.png"]
+    
+sjs.keyDown(D_KEY, function(){
+  rightFacing = true;
+  rightCount = rightCount +1;
+  player.pushRight(2);
+  player.setImage(rightImages[rightCount]);
+  if(rightCount == 5){
+    rightCount = 0;
+  }
+  if(rightCount >= 6){
+    player.setImage("Images/Duck Piskel-1.png.png")
+  }
+});
+
+sjs.keyDown(A_KEY, function(){
+  rightFacing = false;
+  leftCount = leftCount +1
+  player.pushLeft(2);
+  player.setImage(leftImages[leftCount]);
+  if(leftCount == 5){
+    leftCount = 0;
+  }
+  if(leftCount>= 6){
+    player.setImage("Images/LeftDuckPiskel-1.png.png")
+  }
+});
+//jumping code
+var canJump = true
+sjs.keyDown(W_KEY, function(){
+  if(canJump == true){
+    canJump = false
+    player.pushUp(50)
+    if(rightFacing == true){
+      player.setImage("Images/Duck Piskel-1.png.png")
+      rightCount = 6
+    }else{
+      player.setImage("Images/LeftDuckPiskel-1.png.png")
+      leftCount = 6
+    }
+  }
+});
+
+window.addEventListener("keyup",function(e){
+  if(e.keyCode == D_KEY){
+    player.setImage("Images/Duck Piskel-1.png.png")
+  }else if(e.keyCode == A_KEY){
+    player.setImage("Images/LeftDuckPiskel-1.png.png")
+  }
+})
+//On hits
+sjs.onHit("player","platform",function(x,y){
+  sjs.stoppedBy(x,y);
+  if(canJump == false && x.y < y.y-85){
+    canJump = true;
+    rightCount = 0;
+    leftCount = 0;
+  }
+})
+sjs.onHit("player","bottom_screen",function(x,y){
+  sjs.stoppedBy(x,y)
+  if(canJump==false){
+    canJump = true
+    rightCount = 0
+    leftCount = 0
+  }
+})
+sjs.onHit("player",
+["right_screen", "left_screen", "top_screen"],function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("enemy","bottom_screen", function(x,y){
+  sjs.stoppedBy(x,y)
+})
+sjs.onHit("enemy", ["left_screen", "right_screen","wall", "pad"],function(x,y){
+  sjs.bounceOff(x,y)
+})
+sjs.onHit("enemy", "platform", function(x,y){
+  if(x.isAboveOf(y)==true){
+    sjs.stoppedBy(x,y)
+  }else{
+    sjs.bounceOff(x,y)
+  }
+})
+sjs.onHit("player","wall", function(x,y){
+  if(x.isAboveOf(y)==true){
+    sjs.stoppedBy(x,y)
+    if(canJump == false && x.y < y.y-85){
+    canJump = true;
+    rightCount = 0;
+    leftCount = 0;
+  }
+  }else{
+    sjs.bounceOff(x,y)
+  }
+})
+sjs.onHit("player", "pad", function(x,y){
+  if(x.isAboveOf(y)==true){
+    x.pushUp(80)
+  }else{
+    sjs.stoppedBy(x,y)
+  }
+})
+sjs.onHit("trash",["platform","powerUp","flag","enemy","pad","score","wall"],function(x,y){
+  y.destroy()
+  sjs.removeFromArray(level,y)
+})
+//trash code
+var trash = new sjs.Text("Trash",15,"orange")
+    trash.type = "trash"
+    trash.moveTo(720,10)
+    trash.fixed = true
+    trash.setHeight(60)
+    trash.node.style.background = "green"
+    trash.node.style.borderTop = "4px solid yellow"
+} //end start
+//Platform function
+function platform(){
+  var platform = new sjs.Image("Images/platform.png")
+  platform.type = "platform"
+  level.push(platform);
+  platform.setHeight(30)
+  platform.center().offset(-sjs.gx,10)
+  platform.onMouseDown(function(){
+    platform.draggable()
+    platform.follow(sjs.mouse)
+  })
+}
+//wall function
+function wall(){
+  var wall = new sjs.Image("Images/wall.png")
+  wall.type = "wall"
+  level.push(wall);
+  wall.setHeight(150)
+  wall.center().offset(-sjs.gx,10)
+  wall.onMouseDown(function(){
+    wall.draggable()
+    wall.follow(sjs.mouse)
+  })
+}
+//powerup function
+function powerUp(){
+  var powerUp= new sjs.Image("Images/power_up.png")
+  level.push(powerUp)
+  powerUp.type = "powerUp"
+  powerUp.setHeight(30)
+  powerUp.center().offset(-sjs.gx,10)
+  powerUp.onMouseDown(function(){
+    powerUp.draggable()
+    powerUp.follow(sjs.mouse)
+  })
+}
+//score function
+function score(){
+  var score = new sjs.Image("Images/score.png")
+  level.push(score)
+  score.type = "score"
+  score.setHeight(30)
+  score.center().offset(-sjs.gx,10)
+  score.onMouseDown(function(){
+    score.draggable()
+    score.follow(sjs.mouse)
+  })
+}
+//flag function
+function flag(){
+  var flag = new sjs.Image("Images/flag-1.png.png")
+  level.push(flag)
+  flag.type = "flag"
+  flag.setHeight(80)
+  flag.center().offset(-sjs.gx, 10)
+  flag.onMouseDown(function(){
+    flag.draggable()
+    flag.follow(sjs.mouse)
+  })
+  
+}
+//enemy function
+function enemy(){
+  var enemy = new sjs.Image("Images/r_enemy.png")
+  enemy.type = "enemy"
+  enemy.center().offset(-sjs.gx, 10)
+  enemy.friction = 0
+  enemy.noBounds = true
+  enemy.setHFlipImages("Images/l_enemy.png", "Images/r_enemy.png")
+  level.push(enemy)
+  enemy.onMouseDown(function(){
+    enemy.follow(sjs.mouse)
+    enemy.removeGravity()
+    enemy.stop()
+  })
+  enemy.onMouseUp(function(){
+    enemy.unfollow(sjs.mouse)
+    enemy.setGravity()
+    enemy.pushHFacing()
+    enemy.accel=.5
+  })
+}
+//jumppad function
+function jumpPad(){
+  var pad = new sjs.Image("Images/jumpPad.png")
+  level.push(pad)
+  pad.type = "pad"
+  pad.center().offset(-sjs.gx,10)
+  pad.setHeight(50)
+  pad.onMouseDown(function(){
+    pad.draggable()
+    pad.follow(sjs.mouse)
+  })
+}
+
+</script>
+</head>
+<body onload="start()">
+<h1> Duck Run Game </h1>
+<center>
+    <input type ="Image" src="Images/platform.png" onclick="platform()">
+    <input type ="Image" src = "Images/power_up.png" onclick="powerUp()">
+    <input type ="Image" src = "Images/score.png" onclick = "score()">
+    <input type = "Image" src = "Images/flag-1.png.png" onclick = "flag()">
+    <input type = "Image" src = "Images/r_enemy.png" onclick = "enemy()">
+   <input type = "Image" src ="Images/wall.png" onclick = "wall()">
+   <input type = "Image" src ="Images/jumpPad.png" onclick = "jumpPad()">
+  </center>
+<div id="target" style="margin:auto;background:grey;"></div>
+<div id = "output"></div>
+</body>
+</html>
